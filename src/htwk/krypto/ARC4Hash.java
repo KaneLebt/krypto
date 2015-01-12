@@ -97,7 +97,10 @@ public class ARC4Hash{
         }
 
         public static byte[] initARC4( byte[] text){
-            //System.out.println("\n6. Mit dem Textregister wird ARC4 initialisiert.");
+        	byte konst = (byte) 255;
+        	for ( int i=0; i< text.length; i++){
+        		text[i]= (byte) (text[i] & konst);
+        	}
 
             return text;
         }
