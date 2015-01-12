@@ -1,10 +1,15 @@
 package htwk.krypto;
 
+import java.lang.reflect.Array;
+import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
+
 public class ARC4Hash{
  
         public static void main (String[] args){
             String k = DateiAuslessen();
-
+            Textblockaufteiler(k);
             int temp = Blockzerlegung(k);
             int text = initSHA256();
 
@@ -22,9 +27,42 @@ public class ARC4Hash{
 
         public static String DateiAuslessen(){
             System.out.println("\n1. Der aus einer Datei eingelesene Klartext wird wie in SHA-256 aufgefüllt.");
-            return "Hello World";        
+            return "Hello World, ich bin der Test und ich will auch 2 mal gesehen werden, du noob";
         }
 
+        public static void Textblockaufteiler(String s) {
+        	int len = s.length();
+System.out.println(len);
+			
+			List textBlocks = new LinkedList<>();
+			
+			ArrayList<Integer> textBlock = new ArrayList<Integer>();
+			char[] part = new char[16];
+            for (int i =0 ; i <=len/16 ; i++){
+                if((1+i)*16>len){
+                    char[] part1 = s.substring(i*16,len).toCharArray();
+                    for (int j = 0; j < 16; j++) {
+                        if (j<part1.length) {
+                            part[j] = part1[j];
+                        }else{
+                            part[j] = '0';
+                        }
+                    }
+                }else
+                    part = s.substring(i*16,(1+i)*16).toCharArray();
+                for (int j = 0; j < 16 ; j++) {
+                    textBlock.add((int) part[j]);
+                }
+                textBlocks.add(textBlock);
+                textBlock.clear();
+            }
+
+            System.out.println(textBlocks.toString());
+            System.out.println(textBlocks.size());
+			//return null;
+		}
+        
+        
         public static int Blockzerlegung( String k){
             System.out.println("\n2. Der aufgefüllte Klartext wird in Blöcke zu je 128 Bit zerlegt.");
             return k.length();
