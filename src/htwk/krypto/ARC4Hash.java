@@ -12,8 +12,7 @@ public class ARC4Hash{
  
         public static void main (String[] args){
             String k = DateiAuslessen();
-            Textblockaufteiler(k);
-            int temp = Blockzerlegung(k);
+            List textblocks = BlockZerlegung(k);
             int text = initSHA256();
 
             System.out.println("\n4. Für jeden Klartextblock B wiederhole:");
@@ -33,10 +32,8 @@ public class ARC4Hash{
             return "Hello World, ich bin der Test und ich will auch 2 mal gesehen werden, du noob";
         }
 
-        public static List Textblockaufteiler(String s) {
+        public static List BlockZerlegung(String s) {
         	int len = s.length();
-            System.out.println(len);
-			
 			List textBlocks = new LinkedList<>();
 			
 			ArrayList<Integer> textBlock = new ArrayList<Integer>();
@@ -64,12 +61,6 @@ public class ARC4Hash{
             System.out.println(textBlocks.size());
 			return textBlocks;
 		}
-        
-        
-        public static int Blockzerlegung( String k){
-            System.out.println("\n2. Der aufgefüllte Klartext wird in Blöcke zu je 128 Bit zerlegt.");
-            return k.length();
-        }
 
         public static int initSHA256(){
             System.out.println("\n3. Das 256-Bit Textregister wird initialisiert wie in SHA-256.");
