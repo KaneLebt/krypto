@@ -13,15 +13,16 @@ public class ARC4Hash{
         public static void main (String[] args){
             String k = DateiAuslessen();
             List textblocks = BlockZerlegung(k);
-            int text = initSHA256();
+            byte sha256Register[] = initSHA256();
 
             System.out.println("\n4. Für jeden Klartextblock B wiederhole:");
-            int arc;            
-            for( int i=0; i<1; i++){
-                text = exorVerknuefen(text);
-                arc = initARC4(text);            
+            byte arc[] = new byte[sha256Register.length];
+            byte temp[] = new byte[sha256Register.length];
+            for( int i=0; i<sha256Register.length; i++){
+                exorVerknuefen(sha256Register[i]);
+                temp[i] = initARC4(sha256Register[i]);            
                 arc = verARC4(arc);
-                text = nextARC4(arc);            
+                sha256Register = nextARC4(arc);            
             }
             System.out.println("\n9. Ergebnis: Der Inhalt des Textregisters.");        
 
@@ -57,33 +58,42 @@ public class ARC4Hash{
                 textBlock.clear();
             }
 
-            System.out.println(textBlocks.toString());
-            System.out.println(textBlocks.size());
+           //System.out.println(textBlocks.toString());
+           //System.out.println(textBlocks.size());
 			return textBlocks;
 		}
 
-        public static int initSHA256(){
-            System.out.println("\n3. Das 256-Bit Textregister wird initialisiert wie in SHA-256.");
-            return 42;
+        public static byte[] initSHA256(){
+        	MessageDigest md;        	
+        	byte byteData[] = null;
+        	try {
+				md = MessageDigest.getInstance("SHA-256");
+				byteData = md.digest();
+			} catch (NoSuchAlgorithmException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+        	        	
+        	return byteData;
         }
 
-        public static int exorVerknuefen( int text){
-            System.out.println("\n5. Die niederwertigen 128 Bits des Textregisters werden bitweise EXOR-verknüpft mit B.\n   Das liefert die neuen 128 Bits des Textregisters.");
-            return text;
+        public static void exorVerknuefen( int text){
+        	//System.out.println("\n5. Die niederwertigen 128 Bits des Textregisters werden bitweise EXOR-verknüpft mit B.\n   Das liefert die neuen 128 Bits des Textregisters.");
+            //return text;
         }
 
-        public static int initARC4( int text){
-            System.out.println("\n6. Mit dem Textregister wird ARC4 initialisiert.");
-            return text;
+        public static byte initARC4( int text){
+            //System.out.println("\n6. Mit dem Textregister wird ARC4 initialisiert.");
+            return (byte) text;
         }
 
-        public static int verARC4( int arc){
-            System.out.println("\n7. Man läßt die nächsten 256 Bytes des ARC4 verfallen.");
+        public static byte[] verARC4( byte[] arc){
+            //System.out.println("\n7. Man läßt die nächsten 256 Bytes des ARC4 verfallen.");
             return arc;
         }
 
-        public static int nextARC4(int arc){
-            System.out.println("\n8. Die nächsten ausgegebenen 256 Bit des ARC4 liefern den neuen Inhalt des Textregisters.");
+        public static byte[] nextARC4(byte[] arc){
+            //System.out.println("\n8. Die nächsten ausgegebenen 256 Bit des ARC4 liefern den neuen Inhalt des Textregisters.");
             return arc;
         }
         
