@@ -88,8 +88,12 @@ public class ARC4Hash{
         }
 
         public static byte[] exorVerknuefen(byte[] register, ArrayList<Integer> b){
-          
-            return new byte[0];
+        	byte[] dummy = new byte[register.length];
+            for (int i = 0; i < b.size() ; i++) {
+                int a  = b.get(i);
+                dummy[i] = (byte) (register[i]^a);
+            }
+            return dummy;
         }
 
         public static byte initARC4( int text){
