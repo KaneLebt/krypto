@@ -27,9 +27,9 @@ public class ARC4Hash{
             for( int i=0; i<textblocks.size(); i++){
                 ArrayList<Integer> b = (ArrayList<Integer>) textblocks.get(i);
                 sha256Register = exorVerknuefen(sha256Register,b);
-                temp[i] = initARC4(sha256Register[i]);            
-                arc = verARC4(arc);
-                sha256Register = nextARC4(arc);            
+                temp =  initARC4(sha256Register);
+               // arc = verARC4(arc);
+               // sha256Register = nextARC4(arc);
             }
             System.out.println("\n9. Ergebnis: Der Inhalt des Textregisters.");        
 
@@ -96,9 +96,10 @@ public class ARC4Hash{
             return dummy;
         }
 
-        public static byte initARC4( int text){
+        public static byte[] initARC4( byte[] text){
             //System.out.println("\n6. Mit dem Textregister wird ARC4 initialisiert.");
-            return (byte) text;
+
+            return text;
         }
 
         public static byte[] verARC4( byte[] arc){
