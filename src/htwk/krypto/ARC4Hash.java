@@ -2,6 +2,7 @@ package htwk.krypto;
 
 import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -14,12 +15,18 @@ public class ARC4Hash{
             String k = DateiAuslessen();
             List textblocks = BlockZerlegung(k);
             byte sha256Register[] = initSHA256();
-
+            System.out.println(sha256Register.length);
             System.out.println("\n4. Für jeden Klartextblock B wiederhole:");
+            //TODO bitweise XOR textblocks mit sha256Register
+            //end while
+
             byte arc[] = new byte[sha256Register.length];
             byte temp[] = new byte[sha256Register.length];
-            for( int i=0; i<sha256Register.length; i++){
-                exorVerknuefen(sha256Register[i]);
+
+
+            for( int i=0; i<textblocks.size(); i++){
+                ArrayList<Integer> b = (ArrayList<Integer>) textblocks.get(i);
+                sha256Register = exorVerknuefen(sha256Register[i],b);
                 temp[i] = initARC4(sha256Register[i]);            
                 arc = verARC4(arc);
                 sha256Register = nextARC4(arc);            
@@ -38,7 +45,8 @@ public class ARC4Hash{
 			List textBlocks = new LinkedList<>();
 			
 			ArrayList<Integer> textBlock = new ArrayList<Integer>();
-			char[] part = new char[16];
+            
+            char[] part = new char[16];
             for (int i =0 ; i <=len/16 ; i++){
                 if((1+i)*16>len){
                     char[] part1 = s.substring(i*16,len).toCharArray();
@@ -53,8 +61,10 @@ public class ARC4Hash{
                     part = s.substring(i*16,(1+i)*16).toCharArray();
                 for (int j = 0; j < 16 ; j++) {
                     textBlock.add((int) part[j]);
+
                 }
-                textBlocks.add(textBlock);
+                final ArrayList<Integer> t = textBlock;
+                textBlocks.add(new ArrayList<>(t));
                 textBlock.clear();
             }
 
@@ -77,9 +87,9 @@ public class ARC4Hash{
         	return byteData;
         }
 
-        public static void exorVerknuefen( int text){
-        	//System.out.println("\n5. Die niederwertigen 128 Bits des Textregisters werden bitweise EXOR-verknüpft mit B.\n   Das liefert die neuen 128 Bits des Textregisters.");
-            //return text;
+        public static byte[] exorVerknuefen(int text, ArrayList<Integer> b){
+        	
+            return new byte[0];
         }
 
         public static byte initARC4( int text){
