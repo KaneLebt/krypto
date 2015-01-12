@@ -1,3 +1,8 @@
+.gitignore
 *.class
 .project
 .classpath
+krypto.iml
+.idea
+bin
+out

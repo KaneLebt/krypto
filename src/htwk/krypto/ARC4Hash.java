@@ -33,9 +33,9 @@ public class ARC4Hash{
             return "Hello World, ich bin der Test und ich will auch 2 mal gesehen werden, du noob";
         }
 
-        public static void Textblockaufteiler(String s) {
+        public static List Textblockaufteiler(String s) {
         	int len = s.length();
-System.out.println(len);
+            System.out.println(len);
 			
 			List textBlocks = new LinkedList<>();
 			
@@ -62,7 +62,7 @@ System.out.println(len);
 
             System.out.println(textBlocks.toString());
             System.out.println(textBlocks.size());
-			//return null;
+			return textBlocks;
 		}
         
         
