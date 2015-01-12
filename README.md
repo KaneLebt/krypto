@@ -17,10 +17,11 @@ Commiten:
 Akutellen Stand holen:
 # git pull
 
-Aufgabe
+Aufgaben:
 
 Aufgabe 9: Streufunktion mit ARC4
 Mit Alleged RC4 (ARC4) soll folgendermaßen eine Streufunktion implementiert werden:
+
 1. Der aus einer Datei eingelesene Klartext wird wie in SHA-256 aufgefüllt.
 
 2. Der aufgefüllte Klartext wird in Blöcke zu je 128 Bit zerlegt.
@@ -36,6 +37,4 @@ Das liefert die neuen 128 Bits des Textregisters.
 8. Die nächsten ausgegebenen 256 Bit des ARC4 liefern den neuen Inhalt des Textregisters.
 9. Ergebnis: Der Inhalt des Textregisters.
 
-Die Streuwerte von einigen Beispielen sollen damit bestimmt werden.
-
-
+Die Streuwerte von einigen Beispielen sollen damit bestimmt werden. 
