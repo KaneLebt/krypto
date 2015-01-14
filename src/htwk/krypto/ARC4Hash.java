@@ -1,4 +1,4 @@
-package htwk.krypto;
+package src.htwk.krypto;
 
 import java.lang.reflect.Array;
 import java.util.ArrayList;
