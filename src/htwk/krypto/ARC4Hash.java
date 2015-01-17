@@ -5,8 +5,6 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.List;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
@@ -16,10 +14,11 @@ public class ARC4Hash{
 		private static byte[] cleartext;
         private static final int bitBlocksign = 16;
 
-
-        public static void main (String[] args){
+		public static void main (String[] args){
         	
+			//file argument handle
         	if(args.length == 1){
+        		System.out.println("Datei geladen: " + args[0]);
         		cleartext = readBytesFromFile(args[0]);
         	}else{
         		System.err.println("WARNING: A test string is used as cleartext");
@@ -28,32 +27,27 @@ public class ARC4Hash{
             
         	//convert byte array to String via new String() constructor
         	// create textblocks
-            List textblocks = BlockZerlegung(new String(cleartext));
+        	ArrayList<ArrayList<Integer>> textblocks = blockFragmentation(new String(cleartext));
             
-            //char sha256Register[] = initSHA256();
-            System.out.println("\n4. Für jeden Klartextblock B wiederhole:");
-            //TODO bitweise XOR textblocks mit sha256Register
-            //end while
-
+        	System.out.println("Streufunktion mit ARC4 läuft.");
+        	
+            //Run Algorithm
             char textregister[] = initSHA256();
-            char temp[] = new char[textregister.length];
-
             ARC4 arc4 = new ARC4();
             for( int i=0; i<textblocks.size(); i++){
                 ArrayList<Integer> b = (ArrayList<Integer>) textblocks.get(i);
-                textregister = exorVerknuefen(textregister,b);
+                textregister = EXOR(textregister,b);
                 textregister = arc4.initARC(textregister);
                 
-                //lassen wir "verfallen"
-                temp = arc4.generate(textregister);
                 textregister = arc4.generate(textregister);
             }
             
-            System.out.println("\n9. Ergebnis: Der Inhalt des Textregisters.");        
+            System.out.println("\nFertig. Inhalt des Textregisters:");        
             System.out.println(new String(textregister));
-            System.out.println(textregister.length);
             
-            System.out.println(displayHexFromCharArray(textregister));
+            System.out.println("\nLänge des Resultathashes:\n" + textregister.length);
+            
+            System.out.println("\nResultathash:\n" + displayHexFromCharArray(textregister));
             
         }
         
@@ -75,10 +69,17 @@ public class ARC4Hash{
 			return sb.toString();
         	
         }
-
-        public static List BlockZerlegung(String s) {
+        
+        /**
+         * Separates String into fragments the size of global variable bitBlocksign
+         * @param s
+         * String to be fragmented
+         * @return
+         * ArrayList containing the blocks as ArrayLists of Integers
+         */
+        public static ArrayList<ArrayList<Integer>> blockFragmentation(String s) {
         	int len = s.length();
-			List textBlocks = new LinkedList<>();
+        	ArrayList<ArrayList<Integer>> textBlocks = new ArrayList<ArrayList<Integer>>();
 			
 			ArrayList<Integer> textBlock = new ArrayList<Integer>();
             
@@ -104,11 +105,14 @@ public class ARC4Hash{
                 textBlock.clear();
             }
 
-           //System.out.println(textBlocks.toString());
-           //System.out.println(textBlocks.size());
 			return textBlocks;
 		}
-
+        
+        /**
+         * Initialize SHA256
+         * @return
+         * Init char array
+         */
         public static char[] initSHA256(){
         	MessageDigest md;        	
         	byte byteData[] = null;
@@ -128,7 +132,7 @@ public class ARC4Hash{
         	return charArray;
         }
 
-        public static char[] exorVerknuefen(char[] register, ArrayList<Integer> b){
+        public static char[] EXOR(char[] register, ArrayList<Integer> b){
         	char[] dummy = new char[register.length];
             for (int i = 0; i < b.size() ; i++) {
                 int a  = b.get(i);
