@@ -12,7 +12,7 @@ import java.security.NoSuchAlgorithmException;
 
 public class ARC4Hash{
 	
-		private static String testString = "test stringg45wg5gw54gw5445stringg45wg5gw54gw5445stringg45wg5gw54gw5445stringg45wg5gw54gw5445stringg45wg5gw54gw5445";
+		private static String testString = "1asdfasdfasdfsdf1dasdfasdf1";
 		private static byte[] cleartext;
         private static final int bitBlocksign = 16;
 
@@ -35,18 +35,45 @@ public class ARC4Hash{
             //TODO bitweise XOR textblocks mit sha256Register
             //end while
 
-            char arc[] = new char[sha256Register.length];
+            char textregister[] = new char[sha256Register.length];
             char temp[] = new char[sha256Register.length];
 
             ARC4 arc4 = new ARC4();
             for( int i=0; i<textblocks.size(); i++){
                 ArrayList<Integer> b = (ArrayList<Integer>) textblocks.get(i);
                 sha256Register = exorVerknuefen(sha256Register,b);
-                temp = arc4.initARC(sha256Register);
+                textregister = arc4.initARC(sha256Register);
                 
+                //lassen wir "verfallen"
+                temp = arc4.generate(sha256Register);
+                textregister = arc4.generate(sha256Register);     
             }
+            
             System.out.println("\n9. Ergebnis: Der Inhalt des Textregisters.");        
-
+            System.out.println(new String(textregister));
+            System.out.println(textregister.length);
+            
+            System.out.println(displayHexFromCharArray(textregister));
+            
+        }
+        
+        /**
+         * takes a character array and returns its hex representation as a string
+         * @param chararray
+         * character array
+         * @return
+         * hex representation of char array as a string
+         */
+        public static String displayHexFromCharArray(char[] chararray){
+        	
+        	StringBuilder sb = new StringBuilder();
+        	
+        	for(int i = 0; i < chararray.length; i++){
+        		sb.append(String.format("%02x", (byte) chararray[i]));
+            }
+        	
+			return sb.toString();
+        	
         }
 
         public static List BlockZerlegung(String s) {
