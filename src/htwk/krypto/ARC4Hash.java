@@ -13,7 +13,7 @@ import java.security.NoSuchAlgorithmException;
 
 public class ARC4Hash{
 	
-		private static String testString = "test string";
+		private static String testString = "test stringg45wg5gw54gw5445stringg45wg5gw54gw5445stringg45wg5gw54gw5445stringg45wg5gw54gw5445stringg45wg5gw54gw5445";
 		private static byte[] cleartext;
  
         public static void main (String[] args){
@@ -29,22 +29,19 @@ public class ARC4Hash{
         	// create textblocks
             List textblocks = BlockZerlegung(new String(cleartext));
             
-            byte sha256Register[] = initSHA256();
-            System.out.println(sha256Register.length);
+            char sha256Register[] = initSHA256();
             System.out.println("\n4. Für jeden Klartextblock B wiederhole:");
             //TODO bitweise XOR textblocks mit sha256Register
             //end while
 
-            byte arc[] = new byte[sha256Register.length];
-            byte temp[] = new byte[sha256Register.length];
+            char arc[] = new char[sha256Register.length];
+            char temp[] = new char[sha256Register.length];
 
 
             for( int i=0; i<textblocks.size(); i++){
                 ArrayList<Integer> b = (ArrayList<Integer>) textblocks.get(i);
                 sha256Register = exorVerknuefen(sha256Register,b);
                 temp =  initARC4(sha256Register);
-               // arc = verARC4(arc);
-               // sha256Register = nextARC4(arc);
             }
             System.out.println("\n9. Ergebnis: Der Inhalt des Textregisters.");        
 
@@ -83,7 +80,7 @@ public class ARC4Hash{
 			return textBlocks;
 		}
 
-        public static byte[] initSHA256(){
+        public static char[] initSHA256(){
         	MessageDigest md;        	
         	byte byteData[] = null;
         	try {
@@ -93,34 +90,46 @@ public class ARC4Hash{
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
+        	
+        	char charArray[] = new char[byteData.length];
+        	for(int i = 0; i < byteData.length; i++){
+        		charArray[i] = (char) byteData[i];
+        	}
         	        	
-        	return byteData;
+        	return charArray;
         }
 
-        public static byte[] exorVerknuefen(byte[] register, ArrayList<Integer> b){
-        	byte[] dummy = new byte[register.length];
+        public static char[] exorVerknuefen(char[] register, ArrayList<Integer> b){
+        	char[] dummy = new char[register.length];
             for (int i = 0; i < b.size() ; i++) {
                 int a  = b.get(i);
-                dummy[i] = (byte) (register[i]^a);
+                dummy[i] = (char) (register[i]^a);
             }
             return dummy;
         }
 
-        public static byte[] initARC4( byte[] text){
-        	byte konst = (byte) 255;
-        	for ( int i=0; i< text.length; i++){
-        		text[i]= (byte) (text[i] & konst);
+        public static char[] initARC4( char[] text){
+        	char[] s = new char[text.length];
+        	
+        	for(int i = 0; i < s.length; i++){
+        		s[i] = (char) i;
         	}
-
-            return text;
+        	
+        	char j = 0;
+        	for(int i = 0; i < s.length; i++){
+        		j = (char) ((j + s[i] + text[i % (s.length-1)]) % (text.length-1));
+        		s[i] = s[j];
+        	}
+        	
+        	return s;
         }
 
-        public static byte[] verARC4( byte[] arc){
+        public static char[] verARC4( char[] arc){
             //System.out.println("\n7. Man läßt die nächsten 256 Bytes des ARC4 verfallen.");
             return arc;
         }
 
-        public static byte[] nextARC4(byte[] arc){
+        public static char[] nextARC4(char[] arc){
             //System.out.println("\n8. Die nächsten ausgegebenen 256 Bit des ARC4 liefern den neuen Inhalt des Textregisters.");
             return arc;
         }
