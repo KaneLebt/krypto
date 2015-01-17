@@ -1,4 +1,4 @@
-package src.htwk.krypto;
+package htwk.krypto;
 
 import java.io.IOException;
 import java.nio.file.Files;
