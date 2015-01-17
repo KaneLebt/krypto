@@ -11,17 +11,18 @@ public class ARC4 {
 
     }
 
-    public char[] initARC$(char[] textregister){
+    public char[] initARC(char[] textregister){
+    	int ConsL = 256;
         int length = textregister.length;
-        s = new char[length];
+        s = new char[ConsL];
 
-        for(int i = 0; i < s.length; i++){
+        for(int i = 0; i < ConsL; i++){
             s[i] = (char) i;
         }
 
         char j = 0;
-        for(int i = 0; i < s.length-1; i++){
-            j = (char) ((j + s[i] + textregister[i % (s.length-1)]) % (length-1));
+        for(int i = 0; i < ConsL; i++){
+            j = (char) ((j + s[i] + textregister[i % (length)]) % (ConsL));
             swap(i,j);
         }
 

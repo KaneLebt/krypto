@@ -33,8 +33,10 @@ Mit Alleged RC4 (ARC4) soll folgendermaßen eine Streufunktion implementiert wer
 Das liefert die neuen 128 Bits des Textregisters.
 
 6. Mit dem Textregister wird ARC4 initialisiert.
+
 7. Man läßt die nächsten 256 Bytes des ARC4 verfallen.
 8. Die nächsten ausgegebenen 256 Bit des ARC4 liefern den neuen Inhalt des Textregisters.
+
 9. Ergebnis: Der Inhalt des Textregisters.
 
 Die Streuwerte von einigen Beispielen sollen damit bestimmt werden. 
