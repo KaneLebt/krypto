@@ -30,23 +30,23 @@ public class ARC4Hash{
         	// create textblocks
             List textblocks = BlockZerlegung(new String(cleartext));
             
-            char sha256Register[] = initSHA256();
+            //char sha256Register[] = initSHA256();
             System.out.println("\n4. Für jeden Klartextblock B wiederhole:");
             //TODO bitweise XOR textblocks mit sha256Register
             //end while
 
-            char textregister[] = new char[sha256Register.length];
-            char temp[] = new char[sha256Register.length];
+            char textregister[] = initSHA256();
+            char temp[] = new char[textregister.length];
 
             ARC4 arc4 = new ARC4();
             for( int i=0; i<textblocks.size(); i++){
                 ArrayList<Integer> b = (ArrayList<Integer>) textblocks.get(i);
-                sha256Register = exorVerknuefen(sha256Register,b);
-                textregister = arc4.initARC(sha256Register);
+                textregister = exorVerknuefen(textregister,b);
+                textregister = arc4.initARC(textregister);
                 
                 //lassen wir "verfallen"
-                temp = arc4.generate(sha256Register);
-                textregister = arc4.generate(sha256Register);     
+                temp = arc4.generate(textregister);
+                textregister = arc4.generate(textregister);
             }
             
             System.out.println("\n9. Ergebnis: Der Inhalt des Textregisters.");        
