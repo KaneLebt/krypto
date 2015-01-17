@@ -2,7 +2,6 @@ package src.htwk.krypto;
 
 import java.io.IOException;
 import java.nio.file.Files;
-import java.nio.file.NoSuchFileException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
@@ -15,7 +14,9 @@ public class ARC4Hash{
 	
 		private static String testString = "test string";
 		private static byte[] cleartext;
- 
+        private static final int bitBlocksign = 16;
+
+
         public static void main (String[] args){
         	
         	if(args.length == 1){
@@ -58,9 +59,9 @@ public class ARC4Hash{
             
             char[] part = new char[16];
             for (int i =0 ; i <=len/16 ; i++){
-                if((1+i)*16>len){
-                    char[] part1 = s.substring(i*16,len).toCharArray();
-                    for (int j = 0; j < 16; j++) {
+                if((1+i)* bitBlocksign >len){
+                    char[] part1 = s.substring(i* bitBlocksign,len).toCharArray();
+                    for (int j = 0; j < bitBlocksign; j++) {
                         if (j<part1.length) {
                             part[j] = part1[j];
                         }else{
