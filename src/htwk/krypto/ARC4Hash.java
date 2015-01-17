@@ -1,19 +1,34 @@
 package src.htwk.krypto;
 
-import java.lang.reflect.Array;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.NoSuchFileException;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
-
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
 public class ARC4Hash{
+	
+		private static String testString = "test string";
+		private static byte[] cleartext;
  
         public static void main (String[] args){
-            String k = DateiAuslessen();
-            List textblocks = BlockZerlegung(k);
+        	
+        	if(args.length == 1){
+        		cleartext = readBytesFromFile(args[0]);
+        	}else{
+        		System.err.println("WARNING: A test string is used as cleartext");
+        		cleartext = testString.getBytes();
+        	}
+            
+        	//convert byte array to String via new String() constructor
+        	// create textblocks
+            List textblocks = BlockZerlegung(new String(cleartext));
+            
             byte sha256Register[] = initSHA256();
             System.out.println(sha256Register.length);
             System.out.println("\n4. Für jeden Klartextblock B wiederhole:");
@@ -33,11 +48,6 @@ public class ARC4Hash{
             }
             System.out.println("\n9. Ergebnis: Der Inhalt des Textregisters.");        
 
-        }
-
-        public static String DateiAuslessen(){
-            System.out.println("\n1. Der aus einer Datei eingelesene Klartext wird wie in SHA-256 aufgefüllt.");
-            return "Hello World, ich bin der Test und ich will auch 2 mal gesehen werden, du noob";
         }
 
         public static List BlockZerlegung(String s) {
@@ -147,5 +157,30 @@ public class ARC4Hash{
 				e.printStackTrace();
 				return password;
 			}
+        }
+        
+        /**
+         * Reads byte array from file and returns it
+         * @param filePath
+         * path to file
+         * @return
+         * file as byte array
+         */
+        public static byte[] readBytesFromFile(String filePath){
+            
+    		Path path = Paths.get(filePath);
+    		try {
+    			//If file exists
+				if(path.toFile().exists()){
+					//load file into byte array and return it
+	    			byte[] data = Files.readAllBytes(path);
+					return data;
+				}
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+    		System.err.println("File not found. Aborting.");
+			System.exit(-1);
+			return null;
         }
 }
