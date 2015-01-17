@@ -40,3 +40,5 @@ Das liefert die neuen 128 Bits des Textregisters.
 9. Ergebnis: Der Inhalt des Textregisters.
 
 Die Streuwerte von einigen Beispielen sollen damit bestimmt werden. 
+
+end
