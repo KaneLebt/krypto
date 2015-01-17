@@ -1,4 +1,4 @@
-package htwk.krypto;
+package src.htwk.krypto;
 
 /**
  * Created by Blacksheep on 17.01.2015.

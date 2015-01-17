@@ -38,11 +38,12 @@ public class ARC4Hash{
             char arc[] = new char[sha256Register.length];
             char temp[] = new char[sha256Register.length];
 
-
+            ARC4 arc4 = new ARC4();
             for( int i=0; i<textblocks.size(); i++){
                 ArrayList<Integer> b = (ArrayList<Integer>) textblocks.get(i);
                 sha256Register = exorVerknuefen(sha256Register,b);
-                temp =  initARC4(sha256Register);
+                temp = arc4.initARC(sha256Register);
+                
             }
             System.out.println("\n9. Ergebnis: Der Inhalt des Textregisters.");        
 
@@ -107,32 +108,6 @@ public class ARC4Hash{
                 dummy[i] = (char) (register[i]^a);
             }
             return dummy;
-        }
-
-        public static char[] initARC4( char[] text){
-        	char[] s = new char[text.length];
-        	
-        	for(int i = 0; i < s.length; i++){
-        		s[i] = (char) i;
-        	}
-        	
-        	char j = 0;
-        	for(int i = 0; i < s.length; i++){
-        		j = (char) ((j + s[i] + text[i % (s.length-1)]) % (text.length-1));
-        		s[i] = s[j];
-        	}
-        	
-        	return s;
-        }
-
-        public static char[] verARC4( char[] arc){
-            //System.out.println("\n7. Man läßt die nächsten 256 Bytes des ARC4 verfallen.");
-            return arc;
-        }
-
-        public static char[] nextARC4(char[] arc){
-            //System.out.println("\n8. Die nächsten ausgegebenen 256 Bit des ARC4 liefern den neuen Inhalt des Textregisters.");
-            return arc;
         }
         
         public static String SHAHashing (String password){
