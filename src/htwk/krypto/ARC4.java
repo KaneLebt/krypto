@@ -29,18 +29,18 @@ public class ARC4 {
         return s;
     }
 
-    public char[] generate(char[] klarText){
+    public char[] generate(char[] plainText){
         int i = 0;
         int j = 0;
-        char[] schl = new char[klarText.length];
-        for (int n = 0; n < klarText.length; n++) {
+        char[] key = new char[plainText.length];
+        for (int n = 0; n < plainText.length; n++) {
             i = (i+1) % 256;
             j = (j + s[i]) % 256;
             swap(i,j);
             int z = s[(s[i] + s[j] ) % 256];
-            schl[n] = (char) (z^klarText[n]);
+            key[n] = (char) (z^plainText[n]);
         }
-        return schl;
+        return key;
     }
 
 

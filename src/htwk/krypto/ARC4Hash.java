@@ -11,34 +11,36 @@ import java.security.NoSuchAlgorithmException;
 public class ARC4Hash{
 	
 		private static String testString = "1asdfasdfasdfsdf1dasdfasdf1";
-		private static byte[] cleartext;
-        private static final int bitBlocksign = 16;
+		private static byte[] plainText;
+        private static final int blockSize = 16;
 
 		public static void main (String[] args){
         	
 			//file argument handle
         	if(args.length == 1){
         		System.out.println("Datei geladen: " + args[0]);
-        		cleartext = readBytesFromFile(args[0]);
+        		plainText = readBytesFromFile(args[0]);
         	}else{
-        		System.err.println("WARNING: A test string is used as cleartext");
-        		cleartext = testString.getBytes();
+        		System.err.println("WARNUNG: Teststring wird mangels Argument verwendet.");
+        		plainText = testString.getBytes();
         	}
             
         	//convert byte array to String via new String() constructor
-        	// create textblocks
-        	ArrayList<ArrayList<Integer>> textblocks = blockFragmentation(new String(cleartext));
+        	//create textblocks
+        	ArrayList<ArrayList<Integer>> textblocks = blockFragmentation(new String(plainText));
             
         	System.out.println("Streufunktion mit ARC4 läuft.");
         	
             //Run Algorithm
             char textregister[] = initSHA256();
+            char temp[] = new char[textregister.length];
             ARC4 arc4 = new ARC4();
             for( int i=0; i<textblocks.size(); i++){
                 ArrayList<Integer> b = (ArrayList<Integer>) textblocks.get(i);
                 textregister = EXOR(textregister,b);
                 textregister = arc4.initARC(textregister);
-                
+                //flush one round
+                temp = arc4.generate(textregister);
                 textregister = arc4.generate(textregister);
             }
             
@@ -71,7 +73,7 @@ public class ARC4Hash{
         }
         
         /**
-         * Separates String into fragments the size of global variable bitBlocksign
+         * Separates String into fragments the size of global variable blockSize
          * @param s
          * String to be fragmented
          * @return
@@ -83,11 +85,11 @@ public class ARC4Hash{
 			
 			ArrayList<Integer> textBlock = new ArrayList<Integer>();
             
-            char[] part = new char[16];
-            for (int i =0 ; i <=len/16 ; i++){
-                if((1+i)* bitBlocksign >len){
-                    char[] part1 = s.substring(i* bitBlocksign,len).toCharArray();
-                    for (int j = 0; j < bitBlocksign; j++) {
+            char[] part = new char[blockSize];
+            for (int i =0 ; i <=len/blockSize ; i++){
+                if((1+i)* blockSize >len){
+                    char[] part1 = s.substring(i* blockSize,len).toCharArray();
+                    for (int j = 0; j < blockSize; j++) {
                         if (j<part1.length) {
                             part[j] = part1[j];
                         }else{
