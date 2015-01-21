@@ -10,7 +10,7 @@ import java.security.NoSuchAlgorithmException;
 
 public class ARC4Hash{
 	
-		private static String testString = "1asdfasdfasdfsdf1dasdfasdf1";
+		private static String testString = "This is the test string.";
 		private static byte[] plainText;
         private static final int blockSize = 16;
 
@@ -21,7 +21,7 @@ public class ARC4Hash{
         		System.out.println("Datei geladen: " + args[0]);
         		plainText = readBytesFromFile(args[0]);
         	}else{
-        		System.err.println("WARNUNG: Teststring wird mangels Argument verwendet.");
+        		System.err.println("WARNUNG: Teststring wird mangels Argument verwendet.\n");
         		plainText = testString.getBytes();
         	}
             
@@ -33,6 +33,7 @@ public class ARC4Hash{
         	
             //Run Algorithm
             char textregister[] = initSHA256();
+            
             char temp[] = new char[textregister.length];
             ARC4 arc4 = new ARC4();
             for( int i=0; i<textblocks.size(); i++){
