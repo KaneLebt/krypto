@@ -7,10 +7,12 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.Arrays;
+import java.util.Calendar;
 
 public class ARC4Hash{
 	
-		private static String testString = "This is the test string.";
+		private static String testString = "This is the test";
 		private static byte[] plainText;
         private static final int blockSize = 16;
 
@@ -24,10 +26,11 @@ public class ARC4Hash{
         		System.err.println("WARNUNG: Teststring wird mangels Argument verwendet.\n");
         		plainText = testString.getBytes();
         	}
-            
-        	//convert byte array to String via new String() constructor
-        	//create textblocks
-        	ArrayList<ArrayList<Integer>> textblocks = blockFragmentation(new String(plainText));
+
+            //TODO auffüllen
+
+
+        	ArrayList<ArrayList<Character>> textblocks = blockFragmentation(plainText);
             
         	System.out.println("Streufunktion mit ARC4 läuft.");
         	
@@ -37,7 +40,7 @@ public class ARC4Hash{
             char temp[] = new char[textregister.length];
             ARC4 arc4 = new ARC4();
             for( int i=0; i<textblocks.size(); i++){
-                ArrayList<Integer> b = (ArrayList<Integer>) textblocks.get(i);
+                ArrayList<Character> b = textblocks.get(i);
                 textregister = EXOR(textregister,b);
                 textregister = arc4.initARC(textregister);
                 //flush one round
@@ -80,16 +83,18 @@ public class ARC4Hash{
          * @return
          * ArrayList containing the blocks as ArrayLists of Integers
          */
-        public static ArrayList<ArrayList<Integer>> blockFragmentation(String s) {
-        	int len = s.length();
-        	ArrayList<ArrayList<Integer>> textBlocks = new ArrayList<ArrayList<Integer>>();
+        public static ArrayList<ArrayList<Character>> blockFragmentation(byte[] s) {
+        	int len = s.length;
+
+
+        	ArrayList<ArrayList<Character>> textBlocks = new ArrayList<>();
 			
-			ArrayList<Integer> textBlock = new ArrayList<Integer>();
+			ArrayList<Character> textBlock = new ArrayList<>();
             
-            char[] part = new char[blockSize];
+            byte[] part = new byte[blockSize];
             for (int i =0 ; i <=len/blockSize ; i++){
                 if((1+i)* blockSize >len){
-                    char[] part1 = s.substring(i* blockSize,len).toCharArray();
+                    byte[] part1 = Arrays.copyOf(s, i * blockSize);
                     for (int j = 0; j < blockSize; j++) {
                         if (j<part1.length) {
                             part[j] = part1[j];
@@ -98,12 +103,12 @@ public class ARC4Hash{
                         }
                     }
                 }else
-                    part = s.substring(i*16,(1+i)*16).toCharArray();
+                    part = Arrays.copyOf(s,(1+i)* blockSize  );
                 for (int j = 0; j < 16 ; j++) {
-                    textBlock.add((int) part[j]);
+                    textBlock.add((char)part[j]);
 
                 }
-                final ArrayList<Integer> t = textBlock;
+                final ArrayList<Character> t = textBlock;
                 textBlocks.add(new ArrayList<>(t));
                 textBlock.clear();
             }
@@ -135,10 +140,10 @@ public class ARC4Hash{
         	return charArray;
         }
 
-        public static char[] EXOR(char[] register, ArrayList<Integer> b){
+        public static char[] EXOR(char[] register, ArrayList<Character> b){
         	char[] dummy = new char[register.length];
             for (int i = 0; i < b.size() ; i++) {
-                int a  = b.get(i);
+                char a  = b.get(i);
                 dummy[i] = (char) (register[i]^a);
             }
             return dummy;
