@@ -8,12 +8,11 @@ import java.util.ArrayList;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.Arrays;
-import java.util.Calendar;
 
 public class ARC4Hash{
 	
 		private static String testString = "This is the test";
-		private static byte[] plainText;
+		private static char[] plainText;
         private static final int blockSize = 16;
 
 		public static void main (String[] args){
@@ -21,14 +20,11 @@ public class ARC4Hash{
 			//file argument handle
         	if(args.length == 1){
         		System.out.println("Datei geladen: " + args[0]);
-        		plainText = readBytesFromFile(args[0]);
+        		plainText = readCharsFromFile(args[0]);
         	}else{
         		System.err.println("WARNUNG: Teststring wird mangels Argument verwendet.\n");
-        		plainText = testString.getBytes();
+        		plainText = testString.toCharArray();
         	}
-
-            //TODO auffüllen
-
 
         	ArrayList<ArrayList<Character>> textblocks = blockFragmentation(plainText);
             
@@ -39,9 +35,8 @@ public class ARC4Hash{
             
             char temp[] = new char[textregister.length];
             ARC4 arc4 = new ARC4();
-            for( int i=0; i<textblocks.size(); i++){
-                ArrayList<Character> b = textblocks.get(i);
-                textregister = EXOR(textregister,b);
+            for (ArrayList<Character> b : textblocks) {
+                textregister = EXOR(textregister, b);
                 textregister = arc4.initARC(textregister);
                 //flush one round
                 temp = arc4.generate(textregister);
@@ -67,9 +62,9 @@ public class ARC4Hash{
         public static String displayHexFromCharArray(char[] chararray){
         	
         	StringBuilder sb = new StringBuilder();
-        	
-        	for(int i = 0; i < chararray.length; i++){
-        		sb.append(String.format("%02x", (byte) chararray[i]));
+
+            for (char aChararray : chararray) {
+                sb.append(String.format("%02x", (byte) aChararray));
             }
         	
 			return sb.toString();
@@ -83,7 +78,7 @@ public class ARC4Hash{
          * @return
          * ArrayList containing the blocks as ArrayLists of Integers
          */
-        public static ArrayList<ArrayList<Character>> blockFragmentation(byte[] s) {
+        public static ArrayList<ArrayList<Character>> blockFragmentation(char[] s) {
         	int len = s.length;
 
 
@@ -91,10 +86,10 @@ public class ARC4Hash{
 			
 			ArrayList<Character> textBlock = new ArrayList<>();
             
-            byte[] part = new byte[blockSize];
+            char[] part = new char[blockSize];
             for (int i =0 ; i <=len/blockSize ; i++){
                 if((1+i)* blockSize >len){
-                    byte[] part1 = Arrays.copyOf(s, i * blockSize);
+                    char[] part1 = Arrays.copyOf(s, i * blockSize);
                     for (int j = 0; j < blockSize; j++) {
                         if (j<part1.length) {
                             part[j] = part1[j];
@@ -105,7 +100,7 @@ public class ARC4Hash{
                 }else
                     part = Arrays.copyOf(s,(1+i)* blockSize  );
                 for (int j = 0; j < 16 ; j++) {
-                    textBlock.add((char)part[j]);
+                    textBlock.add(part[j]);
 
                 }
                 final ArrayList<Character> t = textBlock;
@@ -151,21 +146,25 @@ public class ARC4Hash{
         
                 
         /**
-         * Reads byte array from file and returns it
+         * Reads byte array from file and convert it to char array
          * @param filePath
          * path to file
          * @return
-         * file as byte array
+         * file as char array
          */
-        public static byte[] readBytesFromFile(String filePath){
+        public static char[] readCharsFromFile(String filePath){
             
     		Path path = Paths.get(filePath);
     		try {
     			//If file exists
 				if(path.toFile().exists()){
 					//load file into byte array and return it
-	    			byte[] data = Files.readAllBytes(path);
-					return data;
+	    			byte[] byteData = Files.readAllBytes(path);
+                    char[] charData = new char[byteData.length];
+                    for (int i = 0; i < byteData.length ; i++) {
+                        charData[i] = (char) byteData[i];
+                    }
+                    return charData;
 				}
 			} catch (IOException e) {
 				e.printStackTrace();
