@@ -36,7 +36,7 @@ public class ARC4Hash{
             char temp[] = new char[textregister.length];
             ARC4 arc4 = new ARC4();
             for (ArrayList<Character> b : textblocks) {
-            	
+            	System.out.println(b.toString());
                 textregister = EXOR(textregister, b);
                 arc4.initARC(textregister);
                 //flush 8 rounds
@@ -91,7 +91,7 @@ public class ARC4Hash{
             char[] part = new char[blockSize];
             for (int i =0 ; i <=len/blockSize ; i++){
                 if((1+i)* blockSize >len){
-                    char[] part1 = Arrays.copyOf(s, i * blockSize);
+                    char[] part1 = Arrays.copyOfRange(s, i * blockSize,len);
                     for (int j = 0; j < blockSize; j++) {
                         if (j<part1.length) {
                             part[j] = part1[j];
@@ -100,7 +100,7 @@ public class ARC4Hash{
                         }
                     }
                 }else
-                    part = Arrays.copyOf(s,(1+i)* blockSize  );
+                	part = Arrays.copyOfRange(s, i*blockSize, blockSize*(i+1));
                 for (int j = 0; j < 16 ; j++) {
                     textBlock.add(part[j]);
 

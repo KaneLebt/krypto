@@ -41,4 +41,4 @@ Das liefert die neuen 128 Bits des Textregisters.
 
 Die Streuwerte von einigen Beispielen sollen damit bestimmt werden. 
 
-end
+ende
