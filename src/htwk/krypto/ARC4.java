@@ -11,7 +11,7 @@ public class ARC4 {
 
     }
 
-    public char[] initARC(char[] textregister){
+    public void initARC(char[] textregister){
     	int ConsL = 256;
         int length = textregister.length;
         s = new char[ConsL];
@@ -25,8 +25,6 @@ public class ARC4 {
             j = (char) ((j + s[i] + textregister[i % (length)]) % (ConsL));
             swap(i,j);
         }
-
-        return s;
     }
 
     public char[] generate(char[] plainText){

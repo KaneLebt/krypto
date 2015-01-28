@@ -36,8 +36,9 @@ public class ARC4Hash{
             char temp[] = new char[textregister.length];
             ARC4 arc4 = new ARC4();
             for (ArrayList<Character> b : textblocks) {
+            	
                 textregister = EXOR(textregister, b);
-                textregister = arc4.initARC(textregister);
+                arc4.initARC(textregister);
                 //flush one round
                 temp = arc4.generate(textregister);
                 textregister = arc4.generate(textregister);
