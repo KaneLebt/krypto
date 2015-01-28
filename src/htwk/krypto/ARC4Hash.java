@@ -39,15 +39,16 @@ public class ARC4Hash{
             	
                 textregister = EXOR(textregister, b);
                 arc4.initARC(textregister);
-                //flush one round
-                temp = arc4.generate(textregister);
+                //flush 8 rounds
+                for(int i = 0; i < 8; i++)
+                	temp = arc4.generate(textregister);
                 textregister = arc4.generate(textregister);
             }
             
             System.out.println("\nFertig. Inhalt des Textregisters:");        
             System.out.println(new String(textregister));
             
-            System.out.println("\nLänge des Resultathashes:\n" + textregister.length);
+            System.out.println("\nLänge des Resultathashes:\n" + textregister.length + " Byte");
             
             System.out.println("\nResultathash:\n" + displayHexFromCharArray(textregister));
             
